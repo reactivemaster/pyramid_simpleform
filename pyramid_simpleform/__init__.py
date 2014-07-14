@@ -195,7 +195,7 @@ class Form(object):
         if self.schema:
             try:
                 self.data = self.schema.to_python(decoded, self.state)
-            except Invalid, e:
+            except Invalid as e:
                 self.errors = e.unpack_errors(self.variable_decode,
                                               self.dict_char,
                                               self.list_char)
@@ -206,7 +206,7 @@ class Form(object):
                     self.data[field] = validator.to_python(decoded.get(field),
                                                            self.state)
 
-                except Invalid, e:
+                except Invalid as e:
                     self.errors[field] = unicode(e)
 
         self.is_validated = True
@@ -234,11 +234,10 @@ class Form(object):
         """
 
         if not self.is_validated:
-            raise RuntimeError, \
-                    "Form has not been validated. Call validate() first"
+            raise RuntimeError("Form has not been validated. Call validate() first")
 
         if self.errors:
-            raise RuntimeError, "Cannot bind to object if form has errors"
+            raise RuntimeError("Cannot bind to object if form has errors")
 
         items = [(k, v) for k, v in self.data.items() if not k.startswith("_")]
         for k, v in items:
