@@ -14,7 +14,10 @@ requires = [
     'pyramid',
     'WebHelpers',
     'FormEncode',
+    'six',
 ]
+
+dependency_links = ['hg+https://summer_wind@bitbucket.org/summer_wind/webhelpers#egg=WebHelpers']
 
 setup(name='pyramid_simpleform',
       version='0.7',
@@ -35,6 +38,7 @@ setup(name='pyramid_simpleform',
       zip_safe=False,
       license="LICENSE.txt",
       install_requires=requires,
+      dependency_links=dependency_links,
       tests_require=requires,
       test_suite="pyramid_simpleform",
       )

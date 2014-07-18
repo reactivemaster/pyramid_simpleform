@@ -5,6 +5,9 @@ from formencode import Invalid
 from pyramid.i18n import get_localizer, TranslationStringFactory, TranslationString
 from pyramid.renderers import render
 
+import six
+
+
 class State(object):
     """
     Default "empty" state object.
@@ -141,7 +144,7 @@ class Form(object):
         Returns any errors for a given field as a list.
         """
         errors = self.errors.get(field, [])
-        if isinstance(errors, basestring):
+        if isinstance(errors, six.string_types):
             errors = [errors]
         return errors
 
