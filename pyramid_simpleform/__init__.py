@@ -130,7 +130,7 @@ class Form(object):
         """
         Returns all errors in a single list.
         """
-        if isinstance(self.errors, basestring):
+        if isinstance(self.errors, six.string_types):
             return [self.errors]
         if isinstance(self.errors, list):
             return self.errors
@@ -178,15 +178,22 @@ class Form(object):
             if self.method and self.method != self.request.method:
                 return False
 
-        if params is None:
+        json_params = None
+        try:
             if hasattr(self.request, 'json_body') and self.request.json_body:
-                params = self.request.json_body
-            elif self.method == "POST":
+                json_params = self.request.json_body
+        except ValueError:
+            pass
+
+        if params is None:
+            if json_params:
+                params = json_params
+            elif self.method == 'POST':
                 params = self.request.POST
             else:
                 params = self.request.params
             
-        if self.variable_decode and not (hasattr(self.request, 'json_body') and self.request.json_body):
+        if self.variable_decode and not json_params:
             decoded = variabledecode.variable_decode(
                         params, self.dict_char, self.list_char)
 
@@ -210,7 +217,7 @@ class Form(object):
                                                            self.state)
 
                 except Invalid as e:
-                    self.errors[field] = unicode(e)
+                    self.errors[field] = six.text_type(e)
 
         self.is_validated = True
 
